@@ -20,6 +20,12 @@ from interface import views
 
 urlpatterns = [
     path('', views.index),
+    path('index.html', views.index),
     path('add-booking.html/', views.add_booking),
+    path('all-booking.html/', views.all_booking),
+    path('all-customer.html/', views.all_customer),
+    path('all-rooms.html/', views.all_room),
+    path('add-room.html/', views.add_room),
 
-] # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+]
