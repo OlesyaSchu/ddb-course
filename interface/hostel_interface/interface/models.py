@@ -13,6 +13,7 @@ class PlaceType(Model):  # Таблица 3. Тип места
 class Places(Model):  # Таблица 4. Места
     place_id = BigAutoField(primary_key=True)                    # UUID PRIMARY KEY,
     place_type_id = ForeignKey('PlaceType', on_delete=CASCADE)   # UUID REFERENCES PLACE_TYPE ( PLACE_TYPE_ID ),
+    available = BooleanField(default=True)
     # room_id = ForeignKey('Room', on_delete=CASCADE)              # UUID REFERENCES ROOM ( ROOM_ID )
 
 
@@ -39,7 +40,7 @@ class Bookings(Model):  # Таблица 5. Брони
     pb_id = BigAutoField(primary_key=True)                       # UUID  PRIMARY KEY,
     arrival_date = DateField(auto_now=True)                      # TIMESTAMP WITH TIME ZONE NOT NULL,
     checkout_date = DateField(auto_now=True)                     # TIMESTAMP WITH TIME ZONE,
-    money_total = SmallIntegerField()                            # MONEY,
+    money_total = IntegerField()                            # MONEY,
     bk_id = ForeignKey('BookingStatus', on_delete=CASCADE)       # UUID    REFERENCES    BOOKING_STATUS(BK_ID),
     guest_id = ForeignKey('Guests', on_delete=CASCADE)           # UUID    REFERENCES    GUESTS(GUEST_ID),
     place_id = ForeignKey('Places', on_delete=CASCADE)           # UUID    REFERENCES    PLACES(PLACE_ID)

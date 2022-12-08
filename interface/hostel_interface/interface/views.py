@@ -1,38 +1,49 @@
 from django.shortcuts import render
 from .models import *
 # Create your views here.
+from django.db.models import F
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 import random
+from datetime import date
+
 
 def index(request):
     return render(request, 'index.html')
 
-
 def add_booking(request):
     placetype = PlaceType.objects.all()
+
     if request.method == 'POST':
-        # booking = Bookings()
+        booking = Bookings()
+        place = Places()
         guest = Guests()
+
         guest.name = request.POST.get("name")
         guest.surname = request.POST.get("surname")
         guest.fathername = request.POST.get("fathername")
+        guest.passport = request.POST.get("passport")
         guest.gender = request.POST.get("gender")
         guest.address = request.POST.get("address")
         guest.birthdate = request.POST.get("birthdate")
-        guest.phone = request.POST.get("phone-number")
+        guest.phone_number = request.POST.get("phonenumber")
         guest.email = request.POST.get("booking-email")
-        # booking.bk_id = random.randint(1, 100)
-        # booking.arrival_date = request.POST.get("arrival")
-        # booking.checkout_date = request.POST.get("departure")
-        # booking.room_type = request.POST.get("room-type")
-        # booking.money_total = 1000 # (placetype.price)
-        # print("########", booking.checkout_date - booking.arrival_date)
         guest.save()
-        # booking.save()
+        booking.arrival_date = request.POST.get("arrival")
+        booking.checkout_date = request.POST.get("departure")
+        booking.room_type = request.POST.get("room-type")
+        f = request.POST.get("arrival").split('/')
+        l = request.POST.get("departure").split('/')
+        f_date = date(int(f[2]), int(f[1]), int(f[0]))
+        l_date = date(int(l[2]), int(l[1]), int(l[0]))
+        delta = l_date - f_date
+        booking.money_total = 1000 * delta.days if request.POST.get("room-type") == 'Single' else 1600 * delta.days
+        booking.bk_id = BookingStatus.objects.only('bk_id').get(status="A")
+        booking.guest_id = Guests.objects.latest('guest_id')
+        booking.place_id = Places.objects.only('place_id').filter(place_type_id=PlaceType.objects.only('place_type_id').get(type=request.POST.get("room-type")), available=True)[0]
+        booking.save()
     else:
-        # booking = Bookings()
+        booking = Bookings()
         guest = Guests()
-
 
     return render(request, 'add-booking.html', {
         'placetype':placetype
@@ -47,7 +58,14 @@ def all_customer(request):
     )
 
 def all_room(request):
-    return render(request, 'all-rooms.html')
+    places_list = Places.objects.all()
+    ptypes = PlaceType.objects.all()
+    return render(request, 'all-rooms.html',
+                  {
+                      'places_list': places_list,
+                      'ptypes': ptypes
+                  }
+    )
 
 def add_room(request):
     return render(request, 'add-room.html')
@@ -60,3 +78,45 @@ def all_booking(request):
                   }
     )
 
+
+def edit_customer(request, id):
+    g_edit = Guests.objects.get(guest_id=id)
+    b_edit = Bookings.objects.get(guest_id=id)
+    placetype = PlaceType.objects.all()
+    if request.method == 'POST':
+        booking = Bookings.objects.get(guest_id=id)
+        guest = Guests.objects.get(guest_id=id)
+
+        guest.name = request.POST.get("name")
+        guest.surname = request.POST.get("surname")
+        guest.fathername = request.POST.get("fathername")
+        guest.passport = request.POST.get("passport")
+        guest.gender = request.POST.get("gender")
+        guest.address = request.POST.get("address")
+        guest.birthdate = request.POST.get("birthdate")
+        guest.phone_number = request.POST.get("phonenumber")
+        guest.email = request.POST.get("booking-email")
+        guest.save()
+        booking.arrival_date = request.POST.get("arrival")
+        booking.checkout_date = request.POST.get("departure")
+        booking.room_type = request.POST.get("room-type")
+
+        f = request.POST.get("arrival").split('/')
+        l = request.POST.get("departure").split('/')
+        f_date = date(int(f[2]), int(f[1]), int(f[0]))
+        l_date = date(int(l[2]), int(l[1]), int(l[0]))
+        delta = l_date - f_date
+        booking.money_total = 1000 * delta.days if request.POST.get("room-type") == 'Single' else 1600 * delta.days
+
+        booking.bk_id = BookingStatus.objects.only('bk_id').get(status="A")
+        booking.guest_id = Guests.objects.get(guest_id=id)
+        booking.place_id = Places.objects.only('place_id').filter(place_type_id=PlaceType.objects.only('place_type_id').get(type=request.POST.get("room-type")), available=True)[0]
+        booking.save()
+    return render(request, 'edit-customer.html',
+                  {
+                      'id': id,
+                      'g_edit': g_edit,
+                      'b_edit': b_edit,
+                      'placetype': placetype
+                  }
+    )

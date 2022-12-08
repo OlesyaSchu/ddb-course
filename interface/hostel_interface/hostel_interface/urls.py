@@ -26,6 +26,7 @@ urlpatterns = [
     path('all-customer.html/', views.all_customer),
     path('all-rooms.html/', views.all_room),
     path('add-room.html/', views.add_room),
+    path('edit-customer/<int:id>', views.edit_customer),
 
 
 ]
