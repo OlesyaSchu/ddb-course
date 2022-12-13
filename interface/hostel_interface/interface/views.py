@@ -24,21 +24,24 @@ def add_booking(request):
         guest.passport = request.POST.get("passport")
         guest.gender = request.POST.get("gender")
         guest.address = request.POST.get("address")
-        guest.birthdate = request.POST.get("birthdate")
+        datee = request.POST.get("birthdate").split('/')
+        b_date = date(int(datee[2]), int(datee[1]), int(datee[0]))
+        guest.birthdate = b_date
         guest.phone_number = request.POST.get("phonenumber")
         guest.email = request.POST.get("booking-email")
         guest.save()
-
-        booking.arrival_date = request.POST.get("arrival")
-        booking.checkout_date = request.POST.get("departure")
-        booking.room_type = request.POST.get("room-type")
 
         f = request.POST.get("arrival").split('/')
         l = request.POST.get("departure").split('/')
         f_date = date(int(f[2]), int(f[1]), int(f[0]))
         l_date = date(int(l[2]), int(l[1]), int(l[0]))
+        booking.arrival_date = f_date
+        booking.checkout_date = l_date
+        booking.room_type = request.POST.get("room-type")
+
         delta = l_date - f_date
-        booking.money_total = 1000 * delta.days if request.POST.get("room-type") == 'Single' else 1600 * delta.days
+        price = PlaceType.objects.values().get(type=request.POST.get("room-type"))['PRICE']
+        booking.money_total = price * delta.days
 
         booking.bk_id = BookingStatus.objects.only('bk_id').get(status="A")
         booking.guest_id = Guests.objects.latest('guest_id')
@@ -57,13 +60,55 @@ def add_booking(request):
         'placetype':placetype
     })
 
+
 def all_customer(request):
     customer_list = Guests.objects.all()
     return render(request, 'all-customer.html',
-                  {
-                      'customer_list': customer_list
-                  }
+          {
+              'customer_list': customer_list
+          }
     )
+
+
+def add_placetype(request):
+    last_ptype_ind = PlaceType.objects.values().latest("place_type_id")['place_type_id']
+    if request.method == "POST":
+        ptype = PlaceType()
+        ptype.place_type_id = last_ptype_ind + 1
+        ptype.type = request.POST.get("ptype")
+        ptype.PRICE = request.POST.get("ptype_price")
+        ptype.save()
+    else:
+        ptype = PlaceType()
+    return render(request, 'add-placetype.html')
+
+
+def all_placetype(request):
+    ptype_list = PlaceType.objects.all()
+    return render(request, 'all-placetype.html', {
+        "ptype_list": ptype_list
+    })
+
+def all_services(request):
+    service_list = Services.objects.all()
+    return render(request, 'all-services.html', {
+        "service_list": service_list
+    })
+
+
+def add_service(request):
+    if request.method == "POST":
+        service = Services()
+        last_service_ind = 0
+        if Services.objects.all():
+            last_service_ind = Services.objects.values().latest("service_id")['service_id']
+        service.service_id = last_service_ind + 1
+        service.price = request.POST.get("service-price")
+        service.description = request.POST.get("service-description")
+        service.save()
+    else:
+        service = Services()
+    return render(request, 'add-service.html')
 
 
 def del_customer(request, id):
@@ -74,14 +119,13 @@ def del_customer(request, id):
     customer_list = Guests.objects.all()
     delete_list = Guests.objects.get(guest_id=id)
     delete_list.delete()
-
-
     return render(request, 'all-customer.html',
                   {
                       'id': id,
                       'customer_list': customer_list
                   }
     )
+
 
 def all_room(request):
     places_list = Places.objects.all()
@@ -92,6 +136,7 @@ def all_room(request):
                       'ptypes': ptypes
                   }
     )
+
 
 def add_room(request):
     placetype = PlaceType.objects.all()
