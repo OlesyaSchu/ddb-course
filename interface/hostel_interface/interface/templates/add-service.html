@@ -142,7 +142,7 @@
 				<div class="page-header">
 					<div class="row align-items-center">
 						<div class="col">
-							<h3 class="page-title mt-5">Add Place</h3> </div>
+							<h3 class="page-title mt-5">Add Place Type</h3> </div>
 					</div>
 				</div>
 				<div class="row">
@@ -152,22 +152,21 @@
 							<div class="row formtype">
 								<div class="col-md-4">
 									<div class="form-group">
-										<label>Room Type</label>
-										<select class="form-control" id="sel2" name="room-type" >
-											{% for place in placetype %}
-											<option> {{ place.type }} </option>
-											{% endfor %}
-										</select>
+										<label>Input Servicename</label>
+										<input type="text" class="form-control" id="usr1" name="service-description" >
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label>Input Price</label>
+										<input type="text" class="form-control" id="usr1" name="service-price" >
 									</div>
 								</div>
 							</div>
-							<input type="submit" value="Add Place">
-<!--							<button type="button" class="btn btn-primary buttonedit ml-2">Save</button>-->
+							<input type="submit" value="Create type">
 						</form>
 					</div>
 				</div>
-
-<!--				<button type="button" class="btn btn-primary buttonedit">Cancel</button>-->
 			</div>
 		</div>
 	</div>

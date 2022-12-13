@@ -17,7 +17,7 @@
 
 <body>
 	<div class="main-wrapper">
-		<div class="header">
+	<div class="header">
 			<div class="header-left">
 				<a href="index.html" class="logo"> <img src='{% static "img/hotel_logo.png" %}' width="50" height="70" alt="logo"> <span class="logoclass">HOSTEL</span> </a>
 				<a href="index.html" class="logo logo-small"> <img src='{% static "img/hotel_logo.png" %}' alt="Logo" width="30" height="30"> </a>
@@ -47,28 +47,40 @@
 	<div class="sidebar" id="sidebar">
 			<div class="sidebar-inner slimscroll">
 				<div id="sidebar-menu" class="sidebar-menu">
-					<ul>
-						<li class="active"> <a href="index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a> </li>
+										<ul>
+						<li class="active"> <a href="/index.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a> </li>
 						<li class="list-divider"></li>
 						<li class="submenu"> <a href="#"><i class="fas fa-suitcase"></i> <span> Booking </span> <span class="menu-arrow"></span></a>
 							<ul class="submenu_class" style="display: none;">
-								<li><a href="all-booking.html"> All Booking </a></li>
-								<li><a href="add-booking.html"> Add Booking </a></li>
+								<li><a href="/all-booking.html"> All Booking </a></li>
+								<li><a href="/add-booking.html"> Add Booking </a></li>
 							</ul>
 						</li>
 						<li> <a href="/all-customer.html"><i class="fas fa-user"></i> <span> Customers </span> </a>
 						</li>
-						<li class="submenu"> <a href="#"><i class="fas fa-key"></i> <span> Rooms </span> <span class="menu-arrow"></span></a>
+						<li class="submenu"> <a href="#"><i class="fas fa-key"></i> <span> Places </span> <span class="menu-arrow"></span></a>
 							<ul class="submenu_class" style="display: none;">
-								<li><a href="all-rooms.html">All Rooms </a></li>
-								<li><a href="add-room.html"> Add Rooms </a></li>
+								<li><a href="/all-rooms.html">All Places </a></li>
+								<li><a href="/add-room.html"> Add Places </a></li>
+							</ul>
+						</li>
+						<li class="submenu"> <a href="#"><i class="fas fa-key"></i> <span> Room Types </span> <span class="menu-arrow"></span></a>
+							<ul class="submenu_class" style="display: none;">
+								<li><a href="/placetypes.html"> All Place Type </a></li>
+								<li><a href="/add-placetype.html"> Add Place Types </a></li>
+							</ul>
+						</li>
+						<li class="submenu"> <a href="#"><i class="fas fa-key"></i> <span> Services </span> <span class="menu-arrow"></span></a>
+							<ul class="submenu_class" style="display: none;">
+								<li><a href="/services.html"> All Services </a></li>
+								<li><a href="/add-service.html"> Add Service </a></li>
 							</ul>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
-		<div class="page-wrapper">
+	<div class="page-wrapper">
 			<div class="content container-fluid">
 				<div class="page-header">
 					<div class="row">
