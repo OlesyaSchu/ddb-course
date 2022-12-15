@@ -21,19 +21,25 @@ from interface import views
 urlpatterns = [
     path('', views.index),
     path('index.html', views.index),
+
     path('add-booking.html/', views.add_booking),
     path('all-booking.html/', views.all_booking),
-    path('all-customer.html/', views.all_customer),
-    path('all-customer/<int:id>', views.del_customer),
+
     path('all-rooms.html/', views.all_room),
     path('add-room.html/', views.add_room),
+
+    path('all-customer.html/', views.all_customer),
+    path('all-customer/<int:id>', views.del_customer),
     path('edit-customer/<int:id>', views.edit_customer),
 
     path('add-placetype.html', views.add_placetype),
     path('placetypes.html', views.all_placetype),
+    path('placetypes/<int:id>', views.del_placetype),
 
     path('services.html', views.all_services),
+    path('services/<int:id>', views.del_services),
     path('add-service.html', views.add_service),
+
     path('reviews.html/', views.get_reviews),
 
 ]
