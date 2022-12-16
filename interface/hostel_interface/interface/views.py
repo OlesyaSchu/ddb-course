@@ -153,7 +153,7 @@ def all_customer(request):
 
 
 def add_placetype(request):
-    last_ptype_ind = PlaceType.objects.values().latest("place_type_id")['place_type_id']
+    last_ptype_ind = len(PlaceType.objects.all())
     if request.method == "POST":
         ptype = PlaceType()
         ptype.place_type_id = last_ptype_ind + 1
