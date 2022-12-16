@@ -19,6 +19,26 @@
       "database": "interface",
       "username": "adm",
       "password": ""
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 8001,
+      "driver": "PostgreSQL",
+      "name": "posgr01",
+      "database": "postgres",
+      "username": "repluser",
+      "password": "adm"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 8001,
+      "driver": "PostgreSQL",
+      "name": "posgr02",
+      "database": "postgres",
+      "username": "repluser",
+      "password": "adm"
     }
   ]
 }
