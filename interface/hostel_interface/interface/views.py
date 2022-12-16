@@ -78,47 +78,49 @@ def add_booking(request):
 
 def user_add_booking(request):
     placetype = PlaceType.objects.all()
-
     if request.method == 'POST':
-        booking = Bookings()
-        place = Places()
-        guest = Guests()
-
-        guest.name = request.POST.get("name")
-        guest.surname = request.POST.get("surname")
-        guest.fathername = request.POST.get("fathername")
-        guest.passport = request.POST.get("passport")
-        guest.gender = request.POST.get("gender")
-        guest.address = request.POST.get("address")
         datee = request.POST.get("birthdate").split('/')
         b_date = date(int(datee[2]), int(datee[1]), int(datee[0]))
-        guest.birthdate = b_date
-        guest.phone_number = request.POST.get("phonenumber")
-        guest.email = request.POST.get("booking-email")
-        guest.save()
+        print(datee, "####", b_date)
+        guest = Guests(
+            name=request.POST.get("name"),
+            surname=request.POST.get("surname"),
+            fathername=request.POST.get("fathername"),
+            passport=request.POST.get("passport"),
+            gender=request.POST.get("gender"),
+            address=request.POST.get("address"),
+            birthdate=b_date,
+            phone_number=request.POST.get("phonenumber"),
+            email=request.POST.get("booking-email"),
+            )
 
         f = request.POST.get("arrival").split('/')
         l = request.POST.get("departure").split('/')
         f_date = date(int(f[2]), int(f[1]), int(f[0]))
         l_date = date(int(l[2]), int(l[1]), int(l[0]))
-        booking.arrival_date = f_date
-        booking.checkout_date = l_date
-        booking.room_type = request.POST.get("room-type")
-
         delta = l_date - f_date
         price = PlaceType.objects.values().get(type=request.POST.get("room-type"))['PRICE']
-        booking.money_total = price * delta.days
 
-        booking.bk_id = BookingStatus.objects.only('bk_id').get(status="A")
-        booking.guest_id = Guests.objects.latest('guest_id')
-        booking.place_id = Places.objects.only('place_id').filter(
-            place_type_id=PlaceType.objects.only('place_type_id').get(type=request.POST.get("room-type")),
-            available=True)[0]
-        booking.save()
-
-        last_place = Bookings.objects.values().latest("place_id")['place_id_id']
-        place = Places.objects.get(place_id=last_place)
+        booking = Bookings(
+            arrival_date=f_date,
+            checkout_date=l_date,
+            bk_id=BookingStatus.objects.only('bk_id').get(status="A"),
+            guest_id=guest,
+            money_total=price * delta.days,
+            place_id=Places.objects.only('place_id').filter(
+                place_type_id=PlaceType.objects.only('place_type_id').get(type=request.POST.get("room-type")), available=True)[0]
+            )
+        # place = Places(
+        #     available=False,
+        #     place_id=booking,
+        #     place_type_id=PlaceType.objects.only('place_type_id').get(type=request.POST.get("room-type"))
+        # )
+     #   print("########", Places.objects.values().get(place_id=booking))
+        s = Bookings.objects.values().get(place_id=booking)['place_id_id']
+        place = Places.objects.get(place_id=s)
         place.available = False
+        guest.save()
+        booking.save()
         place.save(update_fields=["available"])
     else:
         booking = Bookings()
