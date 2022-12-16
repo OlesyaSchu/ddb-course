@@ -274,6 +274,13 @@ def add_room(request):
         'placetype': placetype
     })
 
+def del_room(request, id):
+    places_del_list = Places.objects.get(place_id=id)
+    places_del_list.delete()
+    places_list = Places.objects.all()
+    return render(request, 'all-rooms.html', {
+        'places_list': places_list
+    })
 
 def all_booking(request):
     booking_list = Bookings.objects.all()

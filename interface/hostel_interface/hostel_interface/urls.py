@@ -32,6 +32,7 @@ urlpatterns = [
 
     path('all-rooms.html/', views.all_room),
     path('add-room.html/', views.add_room),
+    path('del-room/<int:id>', views.del_room),
 
     path('add-placetype.html', views.add_placetype),
     path('placetypes.html', views.all_placetype),
